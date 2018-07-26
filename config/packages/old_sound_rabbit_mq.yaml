@@ -1,0 +1,70 @@
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:     'localhost'
+            port:     5672
+            user:     'guest'
+            password: 'guest'
+            vhost:    '/'
+            lazy:     false
+            connection_timeout: 3
+            read_write_timeout: 3
+            keepalive: false
+            heartbeat: 0
+            use_socket: true
+    producers:
+#        test producers
+        payment:
+            connection:       default
+            exchange_options: { name: 'billy.v1.payment', type: direct }
+        hold:
+            connection:       default
+            exchange_options: { name: 'billy.v1.hold', type: direct }
+        payout:
+            connection:       default
+            exchange_options: { name: 'billy.v1.payout', type: direct }
+        confirm:
+            connection:       default
+            exchange_options: { name: 'billy.v1.confirm', type: direct }
+        unhold:
+            connection:       default
+            exchange_options: { name: 'billy.v1.unhold', type: direct }
+        transfer:
+            connection:       default
+            exchange_options: { name: 'billy.v1.transfer', type: direct }
+
+#         event producer
+        billi_event:
+            connection:       default
+            exchange_options: { name: 'billy.v1.event', type: direct }
+    consumers:
+        payment:
+            connection:       default
+            exchange_options: { name: 'billy.v1.payment', type: direct }
+            queue_options:    { name: 'billy.v1.payment' }
+            callback:         app.consumer.payment
+        payout:
+            connection:       default
+            exchange_options: { name: 'billy.v1.payout', type: direct }
+            queue_options:    { name: 'billy.v1.payout' }
+            callback:         app.consumer.payout
+        hold:
+            connection:       default
+            exchange_options: { name: 'billy.v1.hold', type: direct }
+            queue_options:    { name: 'billy.v1.hold' }
+            callback:         app.consumer.hold
+        confirm:
+            connection:       default
+            exchange_options: { name: 'billy.v1.confirm', type: direct }
+            queue_options:    { name: 'billy.v1.confirm' }
+            callback:         app.consumer.confirm
+        unhold:
+            connection:       default
+            exchange_options: { name: 'billy.v1.unhold', type: direct }
+            queue_options:    { name: 'billy.v1.unhold' }
+            callback:         app.consumer.unhold
+        transfer:
+            connection:       default
+            exchange_options: { name: 'billy.v1.transfer', type: direct }
+            queue_options:    { name: 'billy.v1.transfer' }
+            callback:         app.consumer.transfer
